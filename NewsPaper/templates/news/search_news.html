@@ -1,0 +1,43 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+   <h1>Все новости</h1>
+   <hr>
+<form action="" method="get">
+    {{filterset.form.as_p }}
+    <input type="submit" value="Найти">
+</form>
+   {% if posts %}
+       <table>
+           <tr>
+               <td>Заголовок</td>
+               <td>Текст</td>
+               <td>Категория</td>
+               <td>Автор</td>
+               <td>Тип публикации</td>
+               <td>Дата публикации</td>
+           </tr>
+
+           {% for p in posts %}
+           <tr>
+               <td>{{ p.title|censor}}</td>
+               <td>{{ p.text|censor|truncatewords:20 }}</td>
+               {% for i in p.category.all %}
+               <td>{{ i }}</td>
+               {% endfor %}
+               <td>{{ p.autor.user}}</td>
+               <td>{{ p.get_categoryType_display}}</td>
+               <td>{{ p.date_creation | date:'d.M.Y'}}</td>
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>Статей нет ! </h2>
+   {% endif %}
+
+{% endblock content %}

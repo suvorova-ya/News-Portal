@@ -1,0 +1,59 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+   <h1>Все новости</h1>
+   <hr>
+
+   {% if posts %}
+       <table>
+           <tr>
+               <td>Заголовок</td>
+               <td>Текст</td>
+               <td>Категория</td>
+               <td>Автор</td>
+               <td>Тип публикации</td>
+               <td>Дата публикации</td>
+           </tr>
+
+           {% for p in posts %}
+           <tr>
+               <td>{{ p.title|censor}}</td>
+               <td>{{ p.text|censor|truncatewords:20 }}</td>
+               {% for i in p.category.all %}
+               <td>{{ i }}</td>
+               {% endfor %}
+               <td>{{ p.autor.user}}</td>
+               <td>{{ p.get_categoryType_display}}</td>
+               <td>{{ p.date_creation | date:'d.M.Y'}}</td>
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>Статей нет ! </h2>
+   {% endif %}
+
+{% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+
+   {{ page_obj.number }}
+
+ {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}
