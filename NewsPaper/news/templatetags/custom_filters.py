@@ -1,5 +1,5 @@
 from django import template
-
+from ..models import Category
 
 register = template.Library()
 
@@ -14,4 +14,8 @@ def censor(value):
         value = value.replace(w[1:], '*' * (len(w)-1))
         return value
 
+@register.simple_tag()
+def get_categories():
+    """Вывод всех категорий"""
+    return Category.objects.all()
 

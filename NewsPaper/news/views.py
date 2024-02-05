@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
@@ -35,7 +36,9 @@ class PostDetailView(DetailView):
 
 
 
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin,CreateView):
+    permission_required = ('news.add_post')
+    raise_exception = True
     form_class = PostForm
     model = Post
     template_name = 'news/post_edit.html'
@@ -47,22 +50,24 @@ class NewsCreate(CreateView):
         post.save()
         return super().form_valid(form)
 
-class NewsUpdate(UpdateView):
+class NewsUpdate(PermissionRequiredMixin,UpdateView):
+    permission_required = ('news.change_post')
     form_class = PostForm
     model = Post
     template_name = 'news/post_edit.html'
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        if self.request.path == 'news/articles/<int:pk>/update' and post.categoryType == 'AR':
+        if self.request.path == 'articles/<int:pk>/update' and post.categoryType == 'AR':
             post.save()
-        elif self.request.path == 'news/<int:pk>/update' and post.categoryType == 'NW':
+        elif self.request.path == '<int:pk>/update' and post.categoryType == 'NW':
             post.save()
         return super().form_valid(form)
 
 
 # Представление удаляющее товар.
-class PostDelete(DeleteView):
+class PostDelete(PermissionRequiredMixin,DeleteView):
+    permission_required = ('news.delete_post')
     model = Post
     template_name = 'news/post_delete.html'
     success_url = reverse_lazy('post_list')

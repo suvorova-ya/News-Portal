@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -32,9 +33,25 @@
                <li class="nav-item">
                    <a class="nav-link" href="{% url 'search_news'%}">Search</a>
                </li>
-               <li class="nav-item">
-                   <a class="nav-link" href="/contact/">Contact</a>
+                   <li class="nav-item">
+                   <a class="nav-link" href="{% url 'personal_account' %}">Profile</a>
                </li>
+               {% if user.is_authenticated %}
+              <span class="nav-link disabled" >{{ user.username }} </span>
+               <li class="nav-item">
+                   <a class="nav-link" href="{% url 'account_logout' %}">Sign out</a>
+               </li>
+               {% else%}
+               <li class="nav-item">
+                   <a class="nav-link" href="{% url 'account_login' %}">Sign in</a>
+               </li>
+                    <li class="nav-item">
+
+                   <a class="nav-link" href="{%  url 'account_signup' %}">Sign up</a>
+               </li>
+
+               {% endif %}
+
            </ul>
        </div>
    </div>

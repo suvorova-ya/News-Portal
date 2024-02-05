@@ -1,0 +1,14 @@
+{% extends "default.html" %}
+
+{% block content %}
+<h2>Страница авторизованного пользователя {{request.user.username}}</h2>
+<div> Здесь может содержаться персональная информация для каждого пользователя </div>
+
+{% if is_not_authors %}
+<button> <a href="upgrade"> Become authors! </a> </button>
+{% endif %}
+<form action="{% url 'account_logout' %}" method="post">
+   {% csrf_token %}
+        <button type="submit" class="btn btn-success">выйти</button>
+</form>
+{% endblock %}
