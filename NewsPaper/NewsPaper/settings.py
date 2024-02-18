@@ -30,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
+SITE_URL = 'http://127.0.0.1:8000'
 
 # Application definition
 
@@ -44,12 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'django_filters',
-    'news',
+    'news.apps.NewsConfig',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.yandex',
+    'django_apscheduler',
 ]
 
 SITE_ID = 1
@@ -124,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -151,9 +153,9 @@ AUTHENTICATION_BACKENDS = [
 
 ACCOUNT_FORMS = {"signup": "account.forms.CustomSignupForm"}
 
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_ADDR')
@@ -163,3 +165,6 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = os.getenv('HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_USE_SSL = True
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25

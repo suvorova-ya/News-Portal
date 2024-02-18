@@ -4,6 +4,9 @@
 <h2>Страница авторизованного пользователя {{request.user.username}}</h2>
 <div> Здесь может содержаться персональная информация для каждого пользователя </div>
 
+<p> name : {{user.username}} </p>
+ <p>  email:  {{user.email}}</p>
+
 {% if is_not_authors %}
 <button> <a href="upgrade"> Become authors! </a> </button>
 {% endif %}

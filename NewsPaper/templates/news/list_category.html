@@ -5,17 +5,22 @@ News
 {% endblock title %}
 
 {% block content %}
-   <h1>Новости</h1>
-   <hr>
+   <h1 class="text-center">Новости </h1>
+ {% if is_not_subscriber %}
+<a href="{% url 'subscriber_user' category.id %}"><button type="button" class="btn btn-outline-secondary">Subscribe</button></a><br>
 
+{% else %}
+ <a href="{% url 'subscriber_user' category.id %}"><button type="button"  class="btn btn-outline-secondary">upsubscribe</button></a><br>
+ {% endif %}
+   <hr>
 
    <div class="naz1">
 
 </div>
-     {% for p in posts %}
+     {% for p in cat %}
 <div class="info">
         {% for category in p.category.all %}
-    <div align="left">Категория: <a href="{% url 'category_list' category.id %}"> {{ category }}</a> </div><br>
+                      <div align="left">Категория: <a href="{% url 'category_list' category.id %}"> {{ category }}</a></div><br>
 
    {% endfor %}
 

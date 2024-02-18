@@ -1,12 +1,12 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
 from django.urls import reverse
 
 
 class Autor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     rating = models.SmallIntegerField(default=0)
 
     def __str__(self):
@@ -25,8 +25,9 @@ class Autor(models.Model):
         verbose_name_plural = "Авторы"
 
 class Category(models.Model):
-    name = models.CharField(max_length=25, unique=True)
-    _url = models.SlugField(max_length=160, unique=True, null=True)
+    name = models.CharField(max_length=25, unique=True, verbose_name='Название')
+    slug = models.SlugField(max_length=160, unique=True, null=True, verbose_name='slug')
+    subscribers = models.ManyToManyField(User, blank=True, related_name='categories', verbose_name='Подписчики')
 
     def __str__(self):
         return self.name
@@ -71,14 +72,17 @@ class Post(models.Model):
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
 
+
 class PostCategory(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Статья')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
 
     class Meta:
         verbose_name = "Категория новости"
         verbose_name_plural = "Категории новостей"
 
+    def __str__(self):
+        return f'Текст: {self.post} Категория: {self.category}'
 
 class Comment(models.Model):
     post_comment = models.ForeignKey(Post, on_delete=models.CASCADE)
