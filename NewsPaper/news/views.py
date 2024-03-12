@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Category
 from .filters import PostFilter
 from .forms import PostForm
+from .tasks import *
+from django.contrib.auth.models import Group
 
 class PostList(ListView):
     model = Post
@@ -53,7 +54,7 @@ class NewsCreate(PermissionRequiredMixin,CreateView):
         return super().form_valid(form)
 
 class NewsUpdate(PermissionRequiredMixin,UpdateView):
-    permission_required = ('news.change_post')
+    permission_required = 'news.change_post'
     form_class = PostForm
     model = Post
     template_name = 'news/post_edit.html'
@@ -104,5 +105,4 @@ def subscriber_user(request,pk):
         message = 'Вы успешно подписались на рассылку новостей категории'
 
     return render(request, 'news/subscribe.html', {'category': category, 'message': message})
-
 

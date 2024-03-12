@@ -14,22 +14,7 @@
          <p>{{ post.text|linebreaks}}</p>
       <small>Автор:{{ post.autor }}</small><br>
 
-<comment>   <!-- LIKES -->
-{% if user.is_authenticated %}
-  <form action="#" method="POST">
-	{% csrf_token %}
 
-	{% if post_is_liked %}
-	<button type="submit" name="post_id" value="{{object.id}}" class="btn btn-info">Unlike</button>
-	{% else %}
-	<button type="submit" name="post_id" value="{{object.id}}" class="btn btn-info">Like</button>
-	{% endif %}
-  </form>
-{% else %}
-  <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this article!</a><br>
-{% endif %}
-<strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong>
-</comment>
 </div>
 <hr>
    <form method="POST">
