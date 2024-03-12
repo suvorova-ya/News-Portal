@@ -13,5 +13,6 @@ urlpatterns = [
    path('articles/<int:pk>/update', NewsUpdate.as_view(), name='articles_update'),
    path('<int:pk>/delete', PostDelete.as_view(), name='post_delete'),
    path('category/<int:pk>', CategoryList.as_view(), name='category_list'), #фильтр по категориям
-   path('category/<int:pk>/subscribe',subscriber_user, name='subscriber_user') #подписка на категорию
+   path('category/<int:pk>/subscribe',subscriber_user, name='subscriber_user'), #подписка на категорию
+
 ]

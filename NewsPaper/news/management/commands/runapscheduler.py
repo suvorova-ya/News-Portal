@@ -1,42 +1,19 @@
 import logging
-from datetime import datetime, timedelta
 
 from django.conf import settings
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
-from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
-from django.template.loader import render_to_string
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
-from news.models import Post, Category
+
 
 logger = logging.getLogger(__name__)
 
 
 def my_job():
-    today = datetime.now()
-    week = today - timedelta(days=7)
-    posts = Post.objects.filter(date_creation__gte=week)
-    category = set(posts.values_list('category__name', flat=True))
-    subscribers = set(Category.objects.filter(name__in=category).values_list('subscribers__email', flat=True))
-
-    html_content = render_to_string('account/email/weekly newsletter.html',
-
-    {
-                                     'link': settings.SITE_URL,
-                                     'posts': posts,
-            }
-    )
-    msg = EmailMultiAlternatives(
-        subject='Новые новости за неделю',
-        body='',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=subscribers
-    )
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
+    pass
 
 
 def delete_old_job_executions(max_age=604_800):
