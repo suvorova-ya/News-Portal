@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.db import models
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
@@ -67,6 +68,16 @@ class Post(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+    def save(self, *args, **kwargs):
+        """Переопределение метода сохранения модели с очисткой кэша."""
+        super().save(*args, **kwargs)  # Сначала сохраняем объект
+        cache.delete(f'post-{self.pk}')  # Затем удаляем его из кэша
+
+    def delete(self, *args, **kwargs):
+        """Переопределение метода удаления модели с очисткой кэша."""
+        cache.delete(f'post-{self.pk}')  # Удаляем кэш перед удалением объекта
+        super().delete(*args, **kwargs)  # Затем удаляем объект из базы данных
 
     class Meta:
         verbose_name = "Новость"

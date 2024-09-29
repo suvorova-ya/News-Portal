@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .filters import PostFilter
 from .forms import PostForm
 from .tasks import *
-from django.contrib.auth.models import Group
+from django.core.cache import cache
 
 class PostList(ListView):
     model = Post
@@ -36,6 +36,11 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'news/post.html'
     context_object_name = 'post'
+
+    def get_object(self, queryset=None):
+        post_id = f'post_{self.kwargs["pk"]}'
+        post = cache.get_or_set(post_id, super().get_object, timeout=None)  # Кэширование на неограниченный срок
+        return post
 
 
 
